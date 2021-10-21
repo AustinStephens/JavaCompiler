@@ -57,10 +57,10 @@ public final class Scope {
 
     @Override
     public String toString() {
+        Environment.Variable var = variables.get("y");
         return "Scope{" +
-                "parent=" + parent +
-                ", variables=" + variables +
-                ", functions=" + functions +
+                "parent=" + (parent == null ? "null" : parent.toString()) +
+                ", variables=" + (var == null ? "null" : "y") +
                 '}';
     }
 

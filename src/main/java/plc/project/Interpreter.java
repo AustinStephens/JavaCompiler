@@ -61,7 +61,13 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
         scope.defineFunction(ast.getName(),
                 ast.getParameters().size(),
                 args -> {
+                    Scope prevScope = scope;
+                    while(scope.getParent().getParent() != null) {
+                        scope = scope.getParent();
+                    }
                     scope = new Scope(scope);
+
+
                     List<String> params = ast.getParameters();
                     for(int i = 0; i < params.size(); i++) {
                         scope.defineVariable(params.get(i), args.get(i));
@@ -72,9 +78,9 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
                         for(Ast.Stmt stmt : stmts) {
                             visit(stmt);
                         }
-                        scope = scope.getParent();
+                        scope = prevScope;
                     } catch(Return e) {
-                        scope = scope.getParent();
+                        scope = prevScope;
                         return e.value;
                     }
                     return Environment.NIL;
