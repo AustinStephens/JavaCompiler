@@ -67,13 +67,15 @@ public final class Parser {
      * next tokens start a field, aka {@code LET}.
      */
     public Ast.Field parseField() throws ParseException {
-        // 'LET' indentifier ('=' expression)? ';'
+        // 'LET' identifier ':' identifier ('=' expression)? ';'
 
-        if(!match(Token.Type.IDENTIFIER)) {
-            exceptionHelper("Expected Identifier.");
-        }
-
+        if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
         String name = tokens.get(-1).getLiteral();
+
+        if(!match(":")) exceptionHelper("Expected Colon.");
+
+        if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Type Name.");
+        String type = tokens.get(-1).getLiteral();
 
         Optional<Ast.Expr> value = Optional.empty();
 
@@ -82,10 +84,9 @@ public final class Parser {
             value = Optional.of(expr);
         }
 
-
         if(!match(";")) exceptionHelper("Missing semicolon");
 
-        return new Ast.Field(name, value);
+        return new Ast.Field(name, type, value);
     }
 
     /**
@@ -93,7 +94,7 @@ public final class Parser {
      * next tokens start a method, aka {@code DEF}.
      */
     public Ast.Method parseMethod() throws ParseException {
-        // 'DEF' identifier '(' (identifier (',' identifier)*)? ')' 'DO' statement* 'END'
+        // 'DEF' identifier '(' (identifier ':' identifier (',' identifier ':' identifier)*)? ')' (':' identifier)? 'DO' statement* 'END'
 
         if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
         String name = tokens.get(-1).getLiteral();
@@ -101,16 +102,30 @@ public final class Parser {
         if(!match("(")) exceptionHelper("Missing opening parenthesis.");
 
         ArrayList<String> params = new ArrayList<String>();
+        ArrayList<String> paramTypes = new ArrayList<String>();
 
         if(match(Token.Type.IDENTIFIER)) {
             params.add(tokens.get(-1).getLiteral());
+            if(!match(":")) exceptionHelper("Expected colon.");
+            if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Type Name");
+            paramTypes.add(tokens.get(-1).getLiteral());
             while(match(",")) {
                 if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
                 params.add(tokens.get(-1).getLiteral());
+                if(!match(":")) exceptionHelper("Expected colon.");
+                if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Type Name");
+                paramTypes.add(tokens.get(-1).getLiteral());
             }
         }
 
         if(!match(")")) exceptionHelper("Missing closing parenthesis");
+
+        String returnType = null;
+        if(match(":")) {
+            if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Return Type Name.");
+            returnType = tokens.get(-1).getLiteral();
+        }
+
         if(!match("DO")) exceptionHelper("Missing DO keyword");
 
         ArrayList<Ast.Stmt> statements = new ArrayList<Ast.Stmt>();
@@ -127,7 +142,10 @@ public final class Parser {
 
         if(!match("END")) exceptionHelper("Expected END keyword.");
 
-        return new Ast.Method(name, params, statements);
+        Optional<String> type = Optional.empty();
+        if(returnType != null)
+            type = Optional.of(returnType);
+        return new Ast.Method(name, params, paramTypes, type, statements);
     }
 
     /**
@@ -174,26 +192,27 @@ public final class Parser {
      * statement, aka {@code LET}.
      */
     public Ast.Stmt.Declaration parseDeclarationStatement() throws ParseException {
-        // 'LET' identifier ('=' expression)? ';'
+        // 'LET' identifier (':' identifier)? ('=' expression)? ';'
         match("LET");
 
-        if(!match(Token.Type.IDENTIFIER)) {
-            exceptionHelper("Expected Identifier.");
-        }
-
+        if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
         String name = tokens.get(-1).getLiteral();
 
-        Optional<Ast.Expr> value = Optional.empty();
+        Optional<String> type = Optional.empty();
+        if(match(":")) {
+            if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Type Name.");
+            type = Optional.of(tokens.get(-1).getLiteral());
+        }
 
+        Optional<Ast.Expr> value = Optional.empty();
         if(match("=")) {
             Ast.Expr expr = parseExpression();
             value = Optional.of(expr);
         }
 
-
         if(!match(";")) exceptionHelper("Missing semicolon");
 
-        return new Ast.Stmt.Declaration(name, value);
+        return new Ast.Stmt.Declaration(name, type, value);
     }
 
     /**
