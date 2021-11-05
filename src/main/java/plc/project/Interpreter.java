@@ -1,20 +1,16 @@
 package plc.project;
 
-import org.omg.SendingContext.RunTime;
 
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     private Scope scope = new Scope(null);
+    private HashMap<String, Scope> methodScopes = new HashMap<>();
 
     public Interpreter(Scope parent) {
         scope = new Scope(parent);
@@ -57,17 +53,15 @@ public class Interpreter implements Ast.Visitor<Environment.PlcObject> {
 
     @Override
     public Environment.PlcObject visit(Ast.Method ast) {
+        String methodName = ast.getName() + "/" + ast.getParameters().size();
+        Scope newScope = new Scope(scope);
+        methodScopes.put(methodName, newScope);
 
         scope.defineFunction(ast.getName(),
                 ast.getParameters().size(),
                 args -> {
                     Scope prevScope = scope;
-                    while(scope.getParent().getParent() != null) {
-                        scope = scope.getParent();
-                    }
-                    scope = new Scope(scope);
-
-
+                    scope = new Scope(methodScopes.get(ast.getName() + "/" + ast.getParameters().size()));
                     List<String> params = ast.getParameters();
                     for(int i = 0; i < params.size(); i++) {
                         scope.defineVariable(params.get(i), args.get(i));

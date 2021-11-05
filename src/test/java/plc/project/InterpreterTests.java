@@ -22,7 +22,7 @@ final class InterpreterTests {
     @ParameterizedTest
     @MethodSource
     void testSource(String test, Ast.Source ast, Object expected) {
-        test(ast, expected, new Scope(null));
+        test(ast, expected, null);
     }
 
     private static Stream<Arguments> testSource() {
@@ -63,7 +63,21 @@ final class InterpreterTests {
                                         new Ast.Stmt.Return(new Ast.Expr.Function(Optional.empty(), "f", Arrays.asList(new Ast.Expr.Literal(BigInteger.valueOf(5)))))
                                         )
                                 ))
-                ), BigInteger.valueOf(8))
+                ), BigInteger.valueOf(8)),
+                Arguments.of("Recursive", new Ast.Source(
+                        Arrays.asList(),
+                        Arrays.asList(new Ast.Method("fib", Arrays.asList("n"), Arrays.asList(
+                                    new Ast.Stmt.If(new Ast.Expr.Binary("<", new Ast.Expr.Access(Optional.empty(), "n"), new Ast.Expr.Literal(BigInteger.valueOf(1))), Arrays.asList(
+                                            new Ast.Stmt.Return(new Ast.Expr.Literal(BigInteger.ZERO))), Arrays.asList()),
+                                        new Ast.Stmt.If(new Ast.Expr.Binary("==", new Ast.Expr.Access(Optional.empty(), "n"), new Ast.Expr.Literal(BigInteger.valueOf(1))), Arrays.asList(new Ast.Stmt.Return(new Ast.Expr.Literal(BigInteger.ONE))), Arrays.asList()),
+                                        new Ast.Stmt.Return(new Ast.Expr.Binary("+", new Ast.Expr.Function(Optional.empty(), "fib", Arrays.asList(new Ast.Expr.Binary("-", new Ast.Expr.Access(Optional.empty(), "n"), new Ast.Expr.Literal(BigInteger.valueOf(1))))), new Ast.Expr.Function(Optional.empty(), "fib", Arrays.asList(new Ast.Expr.Binary("-", new Ast.Expr.Access(Optional.empty(), "n"), new Ast.Expr.Literal(BigInteger.valueOf(2)))))
+                                    ))
+                                ))
+                                ,new Ast.Method("main", Arrays.asList(), Arrays.asList(
+                                    new Ast.Stmt.Return(new Ast.Expr.Function(Optional.empty(), "fib", Arrays.asList(new Ast.Expr.Literal(BigInteger.valueOf(7))))))
+                        ))
+                ), BigInteger.valueOf(3))
+
         );
     }
 
