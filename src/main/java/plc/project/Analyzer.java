@@ -39,7 +39,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
         }
 
         Environment.Function main = scope.lookupFunction("main", 0);
-        if(main.getReturnType().equals(Environment.Type.INTEGER)) throw new RuntimeException();
+        if(!main.getReturnType().equals(Environment.Type.INTEGER)) throw new RuntimeException();
         return null;
     }
 
@@ -77,12 +77,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
         for(Ast.Stmt stmt : ast.getStatements()) {
             visit(stmt);
         }
-        /*for(Ast.Stmt stmt : ast.getStatements()) {
-            if(stmt instanceof Ast.Stmt.Return) {
-                Ast.Stmt.Return ret = (Ast.Stmt.Return) stmt;
-                if(ret.getValue().getType().equals(returnType)) throw new RuntimeException("Return expression does not match function return type.");
-            }
-        }*/
+
         scope = scope.getParent();
 
         return null;
@@ -224,6 +219,7 @@ public final class Analyzer implements Ast.Visitor<Void> {
     public Void visit(Ast.Expr.Group ast) {
         if(!(ast.getExpression() instanceof Ast.Expr.Binary)) throw new RuntimeException("Cannot have a singular expression within parenthesis");
         visit(ast.getExpression());
+        ast.setType(ast.getExpression().getType());
         return null;
     }
 

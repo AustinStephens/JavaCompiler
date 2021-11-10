@@ -34,8 +34,10 @@ plc/project/Parser.java
  plc.project.Parser
  plc.project.Parser$1
  plc.project.Parser$TokenStream
-plc/project/Analyzer.java
- plc.project.Analyzer
+plc/project/Interpreter.java
+ plc.project.Interpreter
+ plc.project.Interpreter$1
+ plc.project.Interpreter$Return
 plc/project/Scope.java
  plc.project.Scope
 plc/project/Environment.java
@@ -45,7 +47,5 @@ plc/project/Environment.java
  plc.project.Environment$PlcObject
  plc.project.Environment$Type
  plc.project.Environment$Variable
-plc/project/Interpreter.java
- plc.project.Interpreter
- plc.project.Interpreter$1
- plc.project.Interpreter$Return
+plc/project/Analyzer.java
+ plc.project.Analyzer
