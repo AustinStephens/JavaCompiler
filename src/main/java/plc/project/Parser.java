@@ -1,7 +1,5 @@
 package plc.project;
 
-import sun.nio.cs.CharsetMapping;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public final class Parser {
 
         boolean flag = true;
         while(flag) {
-            if(match("LET")) {
+            if(peek("LET")) {
                 Ast.Field field = parseField();
                 fields.add(field);
             } else {
@@ -49,7 +47,7 @@ public final class Parser {
 
         flag = true;
         while(flag) {
-            if (match("DEF")) {
+            if (peek("DEF")) {
                 Ast.Method method = parseMethod();
                 methods.add(method);
             } else if (tokens.has(0)){
@@ -68,6 +66,7 @@ public final class Parser {
      */
     public Ast.Field parseField() throws ParseException {
         // 'LET' identifier ':' identifier ('=' expression)? ';'
+        match("LET");
 
         if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
         String name = tokens.get(-1).getLiteral();
@@ -95,6 +94,8 @@ public final class Parser {
      */
     public Ast.Method parseMethod() throws ParseException {
         // 'DEF' identifier '(' (identifier ':' identifier (',' identifier ':' identifier)*)? ')' (':' identifier)? 'DO' statement* 'END'
+
+        match("DEF");
 
         if(!match(Token.Type.IDENTIFIER)) exceptionHelper("Expected Identifier.");
         String name = tokens.get(-1).getLiteral();

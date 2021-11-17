@@ -1,13 +1,11 @@
 plc/project/LexerTests.java
  plc.project.LexerTests
-plc/examples/AccountTests.java
- plc.examples.AccountTests
+plc/project/ParserTests.java
+ plc.project.ParserTests
 plc/homework/RegexTests.java
  plc.homework.RegexTests
 plc/project/ParserExpressionTests.java
  plc.project.ParserExpressionTests
-plc/project/ParserTests.java
- plc.project.ParserTests
 plc/project/AnalyzerTests.java
  plc.project.AnalyzerTests
 plc/project/InterpreterTests.java
