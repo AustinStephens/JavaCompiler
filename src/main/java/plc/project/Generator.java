@@ -30,91 +30,90 @@ public final class Generator implements Ast.Visitor<Void> {
 
     @Override
     public Void visit(Ast.Source ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Field ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Method ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.Expression ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.Declaration ast) {
-        throw new UnsupportedOperationException(); //TODO
+//TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.Assignment ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.If ast) {
-        throw new UnsupportedOperationException(); //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.For ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.While ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Stmt.Return ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Expr.Literal ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Expr.Group ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Expr.Binary ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Expr.Access ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
     @Override
     public Void visit(Ast.Expr.Function ast) {
-        throw new UnsupportedOperationException(); //TODO
+        //TODO
         return null;
     }
 
