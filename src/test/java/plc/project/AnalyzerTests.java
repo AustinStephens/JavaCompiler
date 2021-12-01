@@ -353,7 +353,7 @@ public final class AnalyzerTests {
                         // object.method()
                         new Ast.Expr.Function(Optional.of(
                                 new Ast.Expr.Access(Optional.empty(), "object")
-                        ), "method", Arrays.asList()),
+                        ), "method", Arrays.asList(new Ast.Expr.Literal(BigInteger.ONE))),
                         init(new Ast.Expr.Function(Optional.of(
                                 init(new Ast.Expr.Access(Optional.empty(), "object"), ast -> ast.setVariable(new Environment.Variable("object", "object", OBJECT_TYPE, Environment.NIL)))
                         ), "method", Arrays.asList()), ast -> ast.setFunction(new Environment.Function("method", "method", Arrays.asList(Environment.Type.ANY), Environment.Type.INTEGER, args -> Environment.NIL)))

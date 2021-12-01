@@ -247,6 +247,13 @@ public final class Analyzer implements Ast.Visitor<Void> {
         } else {
             requireAssignable(Environment.Type.COMPARABLE, ast.getLeft().getType());
             requireAssignable(Environment.Type.COMPARABLE, ast.getRight().getType());
+            if(ast.getLeft().getType().equals(Environment.Type.INTEGER)) {
+                if (!ast.getRight().getType().equals(Environment.Type.INTEGER))
+                    throw new RuntimeException("Types must match on each side of the operation.");
+            } else if (ast.getLeft().getType().equals(Environment.Type.DECIMAL)){
+                if(!ast.getRight().getType().equals(Environment.Type.DECIMAL))
+                    throw new RuntimeException("Types must match on each side of the operation.");
+            }
             ast.setType(Environment.Type.BOOLEAN);
         }
 
@@ -274,10 +281,10 @@ public final class Analyzer implements Ast.Visitor<Void> {
             func = scope.lookupFunction(ast.getName(), ast.getArguments().size());
         }
         for(int i = 0; i < ast.getArguments().size(); i++) {
-            if(!(ast.getReceiver().isPresent() && i == 0)) {
+            //if(!(ast.getReceiver().isPresent() && i == 0)) {
                 visit(ast.getArguments().get(i));
                 requireAssignable(func.getParameterTypes().get(i), ast.getArguments().get(i).getType());
-            }
+            //}
         }
         ast.setFunction(func);
         return null;

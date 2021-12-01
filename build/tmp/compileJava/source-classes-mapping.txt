@@ -47,3 +47,5 @@ plc/project/Parser.java
  plc.project.Parser
  plc.project.Parser$1
  plc.project.Parser$TokenStream
+plc/project/Generator.java
+ plc.project.Generator
