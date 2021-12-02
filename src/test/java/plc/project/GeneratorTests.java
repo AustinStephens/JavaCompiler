@@ -100,7 +100,7 @@ public class GeneratorTests {
         );
     }
     */
-    
+
     @ParameterizedTest(name = "{0}")
     @MethodSource
     void testDeclarationStatement(String test, Ast.Stmt.Declaration ast, String expected) {

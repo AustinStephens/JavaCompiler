@@ -89,7 +89,9 @@ public final class Generator implements Ast.Visitor<Void> {
         }
         print(") {");
         //statement list
-        printStatements(ast.getStatements());
+        if(!ast.getStatements().isEmpty()) {
+            printStatements(ast.getStatements());
+        }
         //end function
         print("}");
 
