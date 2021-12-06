@@ -171,6 +171,8 @@ public final class Generator implements Ast.Visitor<Void> {
             print("\"", ast.getLiteral(), "\"");
         } else if(ast.getType().equals(Environment.Type.CHARACTER)) {
             print("\'", ast.getLiteral(), "\'");
+        } else if(ast.getType().equals(Environment.Type.NIL)) {
+            print("null");
         } else {
             print(ast.getLiteral());
         }
@@ -198,7 +200,7 @@ public final class Generator implements Ast.Visitor<Void> {
     public Void visit(Ast.Expr.Access ast) {
         if(ast.getReceiver().isPresent())
             print(ast.getReceiver().get(), ".");
-        print(ast.getName());
+        print(ast.getVariable().getJvmName());
         return null;
     }
 
